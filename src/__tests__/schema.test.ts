@@ -27,7 +27,7 @@ describe("updaterSchema", () => {
     const schema = updaterSchema(home);
     expect(schema.plugin).toBe(UPDATER_NAME);
     expect(schema.defaults.auto_update_mode).toBe("update");
-    expect(schema.defaults.auto_update_triggers).toEqual({ loader: true, app: true, cairn: true });
+    expect(schema.defaults.auto_update_triggers).toEqual({ loader: true, app: true, dashboard: true });
     expect(schema.fields?.some((f) => f.key === "auto_update_mode")).toBe(true);
     expect(schema.current).toEqual({});
   });
@@ -62,12 +62,12 @@ describe("updaterSchema", () => {
     const keys = (updaterSchema(home).fields ?? []).map((f) => f.key);
     expect(keys).toContain("auto_update_triggers.loader");
     expect(keys).toContain("auto_update_triggers.app");
-    expect(keys).toContain("auto_update_triggers.cairn");
+    expect(keys).toContain("auto_update_triggers.dashboard");
   });
 
   it("reports a trigger a home turned off", () => {
-    writeConfig(home, { auto_update_triggers: { loader: true, app: false, cairn: true } });
-    expect(updaterSchema(home).current.auto_update_triggers).toEqual({ loader: true, app: false, cairn: true });
+    writeConfig(home, { auto_update_triggers: { loader: true, app: false, dashboard: true } });
+    expect(updaterSchema(home).current.auto_update_triggers).toEqual({ loader: true, app: false, dashboard: true });
   });
 
   // A dashboard reads the schema, writes a value through its OWN core instance, then reads

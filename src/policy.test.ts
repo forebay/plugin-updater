@@ -22,15 +22,26 @@ describe("update mode", () => {
 
 describe("triggers", () => {
   it("enables every trigger by default", () => {
-    for (const trigger of ["loader", "app", "cairn"] as const) {
+    for (const trigger of ["loader", "app", "dashboard"] as const) {
       expect(triggerEnabled({}, trigger)).toBe(true);
     }
   });
 
   it("disables only what the home turned off", () => {
-    const cfg = { auto_update_triggers: { cairn: false } };
-    expect(triggerEnabled(cfg, "cairn")).toBe(false);
+    const cfg = { auto_update_triggers: { dashboard: false } };
+    expect(triggerEnabled(cfg, "dashboard")).toBe(false);
     expect(triggerEnabled(cfg, "loader")).toBe(true);
+  });
+
+  // A home configured before the dashboard trigger was renamed for its role still carries the key
+  // under the dashboard's own name, and it must keep meaning the same thing.
+  it("honours the key the dashboard trigger was stored under before", () => {
+    expect(triggerEnabled({ auto_update_triggers: { cairn: false } }, "dashboard")).toBe(false);
+    expect(triggerEnabled({ auto_update_triggers: { cairn: false } }, "loader")).toBe(true);
+  });
+
+  it("prefers the current key over the old one when a home carries both", () => {
+    expect(triggerEnabled({ auto_update_triggers: { dashboard: true, cairn: false } }, "dashboard")).toBe(true);
   });
 
   it("ignores a triggers value that is not an object", () => {

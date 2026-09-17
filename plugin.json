@@ -25,7 +25,7 @@
       "auto_update_triggers": {
         "loader": true,
         "app": true,
-        "cairn": true
+        "dashboard": true
       }
     }
   },

@@ -23,7 +23,7 @@ export const UPDATER_DEFAULTS: Record<string, unknown> = {
   auto_update_mode: "update",
   experimental: false,
   experimental_branch: "experimental",
-  auto_update_triggers: { loader: true, app: true, cairn: true },
+  auto_update_triggers: { loader: true, app: true, dashboard: true },
 };
 
 // What each setting is called and how a surface renders it, beside the values the manifest
@@ -41,7 +41,7 @@ export const UPDATER_SETTINGS: CapabilitySchema = {
       description: "Which branch the experimental channel means." },
     { key: "auto_update_triggers.loader", type: "boolean", label: "Check when the launcher menu opens", group: "Triggers" },
     { key: "auto_update_triggers.app", type: "boolean", label: "Check when the app starts", group: "Triggers" },
-    { key: "auto_update_triggers.cairn", type: "boolean", label: "Check when the dashboard starts", group: "Triggers" },
+    { key: "auto_update_triggers.dashboard", type: "boolean", label: "Check when the dashboard starts", group: "Triggers" },
     { key: "update_on_launch", type: "boolean", label: "Update on launch", group: "Updates" },
     { key: "default_update_interval_hours", type: "number", label: "Update interval (h)", min: 0, group: "Updates" },
     { key: "git_timeout_seconds", type: "number", label: "Git timeout (s)", min: 1, group: "Timeouts" },

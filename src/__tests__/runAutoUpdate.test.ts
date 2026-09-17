@@ -139,10 +139,10 @@ describe("runAutoUpdate", () => {
 
   it("does nothing at all for a trigger the home disabled", async () => {
     const { firstHash } = seedBehindClone("no-trigger");
-    writeConfig({ auto_update_mode: "update", auto_update_triggers: { cairn: false } });
+    writeConfig({ auto_update_mode: "update", auto_update_triggers: { dashboard: false } });
 
     const { runAutoUpdate } = await import("../updates.js");
-    const outcome = await runAutoUpdate(configDir, { trigger: "cairn" });
+    const outcome = await runAutoUpdate(configDir, { trigger: "dashboard" });
 
     expect(outcome).toMatchObject({ updated: [], skipped: [], failed: [] });
     expect(head("no-trigger")).toBe(firstHash);

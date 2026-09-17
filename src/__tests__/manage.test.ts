@@ -180,8 +180,8 @@ describe("the plugin-management capability", () => {
   it("carries the occasion into a policy-aware run", async () => {
     listed([]);
     const { capability: managed, calls } = capability();
-    expect(await managed.runUpdates("cairn")).toMatchObject({ ok: true });
-    expect(calls).toEqual([["runUpdates", home, "cairn"]]);
+    expect(await managed.runUpdates("dashboard")).toMatchObject({ ok: true });
+    expect(calls).toEqual([["runUpdates", home, "dashboard"]]);
   });
 
   it("names every plugin that failed a full update run", async () => {

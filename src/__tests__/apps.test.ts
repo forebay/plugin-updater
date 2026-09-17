@@ -109,7 +109,7 @@ describe("plugin-updater app resolution", () => {
 
     try {
       // Mirrors the real loader manifests (claude-code-loader / opencode-loader
-      // cairn.json `app` blocks) so this exercises the same descriptor shape a real
+      // plugin.json `app` blocks) so this exercises the same descriptor shape a real
       // install would register, not a synthetic minimal one.
       registerApp({
         id: "claude", label: "Claude Code",
