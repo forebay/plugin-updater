@@ -18,9 +18,9 @@ afterEach(() => {
 
 describe("plugins.json writers", () => {
   it("registerPlugin adds a new entry with defaults", () => {
-    registerPlugin(dir, "plugin-a", "https://github.com/intisy-ai/plugin-a");
+    registerPlugin(dir, "plugin-a", "https://github.com/forebay/plugin-a");
     expect(getPlugins(dir)).toEqual([
-      { name: "plugin-a", url: "https://github.com/intisy-ai/plugin-a", enabled: true, autoUpdate: true },
+      { name: "plugin-a", url: "https://github.com/forebay/plugin-a", enabled: true, autoUpdate: true },
     ]);
   });
 

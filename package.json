@@ -12,7 +12,7 @@
   "author": "intisy",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/intisy-ai/plugin-updater.git"
+    "url": "git+https://github.com/forebay/plugin-updater.git"
   },
   "keywords": [
     "opencode",

@@ -14,23 +14,23 @@ describe("registerPluginEntry", () => {
   }
 
   it("derives the entry name from the repository url", () => {
-    const added = registerPluginEntry(home, "https://github.com/intisy-ai/demo-plugin.git");
-    expect(added).toMatchObject({ name: "demo-plugin", url: "https://github.com/intisy-ai/demo-plugin", added: true, changed: true });
+    const added = registerPluginEntry(home, "https://github.com/forebay/demo-plugin.git");
+    expect(added).toMatchObject({ name: "demo-plugin", url: "https://github.com/forebay/demo-plugin", added: true, changed: true });
     expect(entries()).toEqual([
-      { name: "demo-plugin", url: "https://github.com/intisy-ai/demo-plugin", enabled: true, autoUpdate: true },
+      { name: "demo-plugin", url: "https://github.com/forebay/demo-plugin", enabled: true, autoUpdate: true },
     ]);
   });
 
   it("reports an entry that is already listed rather than duplicating it", () => {
-    registerPluginEntry(home, "https://github.com/intisy-ai/demo-plugin");
-    const again = registerPluginEntry(home, "https://github.com/intisy-ai/demo-plugin");
+    registerPluginEntry(home, "https://github.com/forebay/demo-plugin");
+    const again = registerPluginEntry(home, "https://github.com/forebay/demo-plugin");
     expect(again.added).toBe(false);
     expect(again.changed).toBe(false);
     expect(entries()).toHaveLength(1);
   });
 
   it("repoints an entry re-registered from a different repository", () => {
-    registerPluginEntry(home, "https://github.com/intisy-ai/demo-plugin");
+    registerPluginEntry(home, "https://github.com/forebay/demo-plugin");
     const again = registerPluginEntry(home, "https://github.com/someone/demo-plugin");
     expect(again).toMatchObject({ added: false, changed: true, url: "https://github.com/someone/demo-plugin" });
     expect(entries()).toHaveLength(1);
@@ -38,26 +38,26 @@ describe("registerPluginEntry", () => {
   });
 
   it("turns sync on for an entry that is already listed without it", () => {
-    registerPluginEntry(home, "https://github.com/intisy-ai/demo-plugin");
-    const again = registerPluginEntry(home, "https://github.com/intisy-ai/demo-plugin", { sync: true });
+    registerPluginEntry(home, "https://github.com/forebay/demo-plugin");
+    const again = registerPluginEntry(home, "https://github.com/forebay/demo-plugin", { sync: true });
     expect(again).toMatchObject({ added: false, syncEnabled: true, changed: true });
     expect(entries()[0].sync).toBe(true);
   });
 
   it("reports no change for an entry whose sync is already on, so a caller cannot claim it acted", () => {
-    registerPluginEntry(home, "https://github.com/intisy-ai/demo-plugin", { sync: true });
-    const again = registerPluginEntry(home, "https://github.com/intisy-ai/demo-plugin", { sync: true });
+    registerPluginEntry(home, "https://github.com/forebay/demo-plugin", { sync: true });
+    const again = registerPluginEntry(home, "https://github.com/forebay/demo-plugin", { sync: true });
     expect(again).toMatchObject({ added: false, syncEnabled: true, changed: false });
   });
 
   it("carries a branch onto a new entry", () => {
-    registerPluginEntry(home, "https://github.com/intisy-ai/demo-plugin", { branch: "experimental" });
+    registerPluginEntry(home, "https://github.com/forebay/demo-plugin", { branch: "experimental" });
     expect(entries()[0].branch).toBe("experimental");
   });
 
   it("removes an entry by name and leaves the others", () => {
-    registerPluginEntry(home, "https://github.com/intisy-ai/one");
-    registerPluginEntry(home, "https://github.com/intisy-ai/two");
+    registerPluginEntry(home, "https://github.com/forebay/one");
+    registerPluginEntry(home, "https://github.com/forebay/two");
     removePluginEntry(home, "one");
     expect(entries().map((entry) => entry.name)).toEqual(["two"]);
   });
@@ -104,12 +104,12 @@ describe("the plugin-management capability", () => {
 
   it("lists what the home has registered, treating an absent enabled key as enabled", async () => {
     listed([
-      { name: "on", url: "https://github.com/intisy-ai/on" },
-      { name: "off", url: "https://github.com/intisy-ai/off", enabled: false },
+      { name: "on", url: "https://github.com/forebay/on" },
+      { name: "off", url: "https://github.com/forebay/off", enabled: false },
     ]);
     expect(await capability().capability.list()).toEqual([
-      { id: "on", enabled: true, url: "https://github.com/intisy-ai/on", version: "", autoUpdate: undefined, channel: undefined },
-      { id: "off", enabled: false, url: "https://github.com/intisy-ai/off", version: "", autoUpdate: undefined, channel: undefined },
+      { id: "on", enabled: true, url: "https://github.com/forebay/on", version: "", autoUpdate: undefined, channel: undefined },
+      { id: "off", enabled: false, url: "https://github.com/forebay/off", version: "", autoUpdate: undefined, channel: undefined },
     ]);
   });
 
@@ -132,9 +132,9 @@ describe("the plugin-management capability", () => {
   it("installs by registering the entry first, then setting it up", async () => {
     listed([]);
     const { capability: managed, calls } = capability();
-    const result = await managed.install("https://github.com/intisy-ai/demo-plugin.git");
+    const result = await managed.install("https://github.com/forebay/demo-plugin.git");
     expect(result.ok).toBe(true);
-    expect(calls).toEqual([["update", "demo-plugin", "https://github.com/intisy-ai/demo-plugin", undefined]]);
+    expect(calls).toEqual([["update", "demo-plugin", "https://github.com/forebay/demo-plugin", undefined]]);
     expect(JSON.parse(readFileSync(join(home, "config", "plugins.json"), "utf8"))[0].name).toBe("demo-plugin");
   });
 
@@ -143,7 +143,7 @@ describe("the plugin-management capability", () => {
     const { capability: managed } = capability({
       updatePluginPublic: async () => { throw new Error("clone refused"); },
     });
-    const result = await managed.install("https://github.com/intisy-ai/demo-plugin");
+    const result = await managed.install("https://github.com/forebay/demo-plugin");
     expect(result).toMatchObject({ ok: false, message: "clone refused" });
     expect(JSON.parse(readFileSync(join(home, "config", "plugins.json"), "utf8"))).toEqual([]);
   });
@@ -160,7 +160,7 @@ describe("the plugin-management capability", () => {
   // The entry module's WRAPPED updateOne is what registers the app a clone carries; routing an
   // update at the raw runner in updates.ts would install without it, which no host could see.
   it("updates through the entry module's wrapped runner, not the raw one", async () => {
-    listed([{ name: "demo", url: "https://github.com/intisy-ai/demo" }]);
+    listed([{ name: "demo", url: "https://github.com/forebay/demo" }]);
     const { capability: managed, calls } = capability();
     expect(await managed.update("demo")).toMatchObject({ ok: true });
     expect(calls).toEqual([["updateOne", home, "demo"]]);
@@ -169,8 +169,8 @@ describe("the plugin-management capability", () => {
   it("registers an entry without setting it up, and answers with it", async () => {
     listed([]);
     const { capability: managed, calls } = capability();
-    expect(await managed.register("https://github.com/intisy-ai/demo-plugin.git"))
-      .toEqual({ id: "demo-plugin", url: "https://github.com/intisy-ai/demo-plugin", enabled: true, version: "" });
+    expect(await managed.register("https://github.com/forebay/demo-plugin.git"))
+      .toEqual({ id: "demo-plugin", url: "https://github.com/forebay/demo-plugin", enabled: true, version: "" });
     expect(calls).toEqual([]);
     expect(JSON.parse(readFileSync(join(home, "config", "plugins.json"), "utf8"))[0].name).toBe("demo-plugin");
   });
@@ -198,7 +198,7 @@ describe("the plugin-management capability", () => {
   });
 
   it("writes an enabled flag and says what it did", async () => {
-    listed([{ name: "demo", url: "https://github.com/intisy-ai/demo" }]);
+    listed([{ name: "demo", url: "https://github.com/forebay/demo" }]);
     expect(await capability().capability.setEnabled("demo", false)).toMatchObject({ ok: true, message: "demo disabled" });
     expect(JSON.parse(readFileSync(join(home, "config", "plugins.json"), "utf8"))[0].enabled).toBe(false);
   });
@@ -214,13 +214,13 @@ describe("the plugin-management capability", () => {
   });
 
   it("records a channel change against the entry", async () => {
-    listed([{ name: "demo", url: "https://github.com/intisy-ai/demo" }]);
+    listed([{ name: "demo", url: "https://github.com/forebay/demo" }]);
     expect(await capability().capability.setChannel("demo", "experimental")).toMatchObject({ ok: true, message: "demo tracks experimental" });
     expect(JSON.parse(readFileSync(join(home, "config", "plugins.json"), "utf8"))[0].channel).toBe("experimental");
   });
 
   it("downgrades the entry the home lists, and declines one it does not", async () => {
-    listed([{ name: "demo", url: "https://github.com/intisy-ai/demo" }]);
+    listed([{ name: "demo", url: "https://github.com/forebay/demo" }]);
     const { capability: managed, calls } = capability();
     expect(await managed.downgrade("demo", "abc123")).toMatchObject({ ok: true, message: "moved to abc123" });
     expect(calls[0][0]).toBe("downgrade");

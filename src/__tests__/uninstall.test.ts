@@ -27,8 +27,8 @@ beforeEach(() => {
   writeFileSync(
     getPluginsPath(configDir),
     JSON.stringify([
-      { name: "plugin-a", url: "https://github.com/intisy-ai/plugin-a", enabled: true },
-      { name: "plugin-b", url: "https://github.com/intisy-ai/plugin-b", enabled: false },
+      { name: "plugin-a", url: "https://github.com/forebay/plugin-a", enabled: true },
+      { name: "plugin-b", url: "https://github.com/forebay/plugin-b", enabled: false },
     ]),
   );
 });

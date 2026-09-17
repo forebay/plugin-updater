@@ -34,7 +34,7 @@ describe("isLoaderPlugin", () => {
         id: "claude", label: "Claude Code",
         home: { envOverride: "HUB_CLAUDE_DIR", nativeEnv: "CLAUDE_CONFIG_DIR", candidates: ["~/.claude", "~/.config/claude"] },
         detect: { binary: "claude", pkg: "@anthropic-ai/claude-code" },
-        loader: { id: "claude-code-loader", url: "intisy-ai/claude-code-loader" },
+        loader: { id: "claude-code-loader", url: "forebay/claude-code-loader" },
         commandsSubdir: "commands", proxyPort: 34567, integration: "env-baseurl", wireFormat: "anthropic",
       },
     });

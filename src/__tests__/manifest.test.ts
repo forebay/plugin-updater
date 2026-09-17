@@ -88,7 +88,7 @@ describe("pruning the deploy directory", () => {
     }
     writeFileSync(join(pluginDir, "package.json"), JSON.stringify({ type: "module" }));
 
-    pruneOrphans(home, [{ name: "kept", url: "https://github.com/intisy-ai/kept" }]);
+    pruneOrphans(home, [{ name: "kept", url: "https://github.com/forebay/kept" }]);
 
     expect(existsSync(join(pluginDir, "kept.js"))).toBe(true);
     expect(existsSync(join(pluginDir, "kept.json"))).toBe(true);
@@ -108,7 +108,7 @@ describe("pruning the deploy directory", () => {
     writeFileSync(join(home, "repos", "checkout-name", "plugin.json"), JSON.stringify({ id: "declared-id", api: 1 }));
     writeFileSync(join(pluginDir, "declared-id.js"), "x");
 
-    pruneOrphans(home, [{ name: "checkout-name", url: "https://github.com/intisy-ai/checkout-name" }]);
+    pruneOrphans(home, [{ name: "checkout-name", url: "https://github.com/forebay/checkout-name" }]);
 
     expect(existsSync(join(pluginDir, "declared-id.js"))).toBe(true);
   });
