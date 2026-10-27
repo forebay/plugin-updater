@@ -28,7 +28,7 @@ export async function syncAllAcrossApps(configDir: string): Promise<void> {
       pluginDir: getPluginDir(configDir),
       scan: { loaded: providers, failed: [] },
       vocabulary: [CROSS_APP_SYNC],
-      runtimeFor: (manifest) => createPluginRuntime(manifest.id, configDir),
+      runtimeFor: (manifest) => createPluginRuntime(manifest, configDir),
     });
     try {
       const [record] = host.host.capability(CROSS_APP_SYNC.id);
