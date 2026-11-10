@@ -78,12 +78,12 @@ describe("removeLibrary", () => {
   it("refuses while a plugin still declares it, and names the plugins", () => {
     const dir = installLibrary("@intisy-ai/anthropic-translator");
     writeHomeManifest({ "@intisy-ai/anthropic-translator": "^1.0.0" });
-    installDeclarer("antigravity-auth", "@intisy-ai/anthropic-translator");
+    installDeclarer("antigravity-provider", "@intisy-ai/anthropic-translator");
 
     const result = removeLibrary(home, "@intisy-ai/anthropic-translator", fakePrune);
 
     expect(result.removed).toBe(false);
-    expect(result.usedBy).toEqual(["antigravity-auth"]);
+    expect(result.usedBy).toEqual(["antigravity-provider"]);
     expect(existsSync(dir)).toBe(true);
   });
 
@@ -93,12 +93,12 @@ describe("removeLibrary", () => {
     installLibrary("@intisy-ai/anthropic-translator", "1.0.0", { "@intisy-ai/basekit": "^1.0.0" });
     installLibrary("@intisy-ai/basekit");
     writeHomeManifest({ "@intisy-ai/anthropic-translator": "^1.0.0", "@intisy-ai/basekit": "^1.0.0" });
-    installDeclarer("antigravity-auth", "@intisy-ai/anthropic-translator");
+    installDeclarer("antigravity-provider", "@intisy-ai/anthropic-translator");
 
     const result = removeLibrary(home, "@intisy-ai/basekit", fakePrune);
 
     expect(result.removed).toBe(false);
-    expect(result.usedBy).toEqual(["antigravity-auth"]);
+    expect(result.usedBy).toEqual(["antigravity-provider"]);
   });
 
   it("reports nothing removed for a library that is not there", () => {
@@ -110,14 +110,14 @@ describe("orphanedLibraries", () => {
   it("names the libraries no installed plugin declares", () => {
     installLibrary("@intisy-ai/left-behind");
     installLibrary("@intisy-ai/anthropic-translator");
-    installDeclarer("antigravity-auth", "@intisy-ai/anthropic-translator");
+    installDeclarer("antigravity-provider", "@intisy-ai/anthropic-translator");
 
     expect(orphanedLibraries(home)).toEqual(["@intisy-ai/left-behind"]);
   });
 
   it("names nothing when every library has a declarer", () => {
     installLibrary("@intisy-ai/anthropic-translator");
-    installDeclarer("antigravity-auth", "@intisy-ai/anthropic-translator");
+    installDeclarer("antigravity-provider", "@intisy-ai/anthropic-translator");
 
     expect(orphanedLibraries(home)).toEqual([]);
   });
@@ -125,7 +125,7 @@ describe("orphanedLibraries", () => {
   it("does not call a transitively-required library orphaned", () => {
     installLibrary("@intisy-ai/anthropic-translator", "1.0.0", { "@intisy-ai/basekit": "^1.0.0" });
     installLibrary("@intisy-ai/basekit");
-    installDeclarer("antigravity-auth", "@intisy-ai/anthropic-translator");
+    installDeclarer("antigravity-provider", "@intisy-ai/anthropic-translator");
 
     expect(orphanedLibraries(home)).toEqual([]);
   });

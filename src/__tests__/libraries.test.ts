@@ -63,11 +63,11 @@ describe("sharedLibraries", () => {
   it("names the plugins that declare each library", () => {
     const home = makeHome();
     shareLibrary(home, "@intisy-ai/basekit", "2.1.0");
-    makeClone(home, "stub-auth", { libraries: ["@intisy-ai/basekit", "@intisy-ai/anthropic-translator"] });
+    makeClone(home, "provider-stub", { libraries: ["@intisy-ai/basekit", "@intisy-ai/anthropic-translator"] });
     makeClone(home, "wakatime-sync", { libraries: ["@intisy-ai/basekit"] });
 
     const core = sharedLibraries(home).find((l) => l.specifier === "@intisy-ai/basekit");
-    expect(core?.usedBy).toEqual(["stub-auth", "wakatime-sync"]);
+    expect(core?.usedBy).toEqual(["provider-stub", "wakatime-sync"]);
   });
 
   // A library nothing names directly still has a plugin behind it: npm installed it because
@@ -141,16 +141,16 @@ describe("pluginDependencies", () => {
   // one library can never be reported twice under two names.
   it("names a dependency by the specifier the plugin imports, not the installed copy's own name", () => {
     const home = makeHome();
-    makeClone(home, "custom-auth", { libraries: ["@intisy-ai/basekit"] });
-    writePackage(join(home, "repos", "custom-auth", "node_modules", "@intisy-ai", "basekit"), { name: "basekit", version: "2.0.0" });
+    makeClone(home, "custom-provider", { libraries: ["@intisy-ai/basekit"] });
+    writePackage(join(home, "repos", "custom-provider", "node_modules", "@intisy-ai", "basekit"), { name: "basekit", version: "2.0.0" });
 
-    expect(pluginDependencies(home, "custom-auth")).toEqual([{ specifier: "@intisy-ai/basekit", version: "2.0.0", usedBy: ["custom-auth"] }]);
+    expect(pluginDependencies(home, "custom-provider")).toEqual([{ specifier: "@intisy-ai/basekit", version: "2.0.0", usedBy: ["custom-provider"] }]);
   });
 
   it("is empty for a plugin that declares none", () => {
     const home = makeHome();
-    makeClone(home, "stub-auth");
-    expect(pluginDependencies(home, "stub-auth")).toEqual([]);
+    makeClone(home, "provider-stub");
+    expect(pluginDependencies(home, "provider-stub")).toEqual([]);
   });
 });
 
@@ -159,12 +159,12 @@ describe("homeLibraries", () => {
     const home = makeHome();
     shareLibrary(home, "@intisy-ai/basekit", "2.1.0");
     makeClone(home, "wakatime-sync", { libraries: ["@intisy-ai/basekit"], dependencies: { undici: "^6.0.0" }, installed: { undici: "6.19.2" } });
-    makeClone(home, "stub-auth", { libraries: ["@intisy-ai/basekit"] });
+    makeClone(home, "provider-stub", { libraries: ["@intisy-ai/basekit"] });
 
     const result = homeLibraries(home);
-    expect(result.shared).toEqual([{ specifier: "@intisy-ai/basekit", version: "2.1.0", usedBy: ["stub-auth", "wakatime-sync"] }]);
+    expect(result.shared).toEqual([{ specifier: "@intisy-ai/basekit", version: "2.1.0", usedBy: ["provider-stub", "wakatime-sync"] }]);
     expect(result.plugins).toEqual([
-      { plugin: "stub-auth", dependencies: [{ specifier: "@intisy-ai/basekit", version: "", usedBy: ["stub-auth"] }] },
+      { plugin: "provider-stub", dependencies: [{ specifier: "@intisy-ai/basekit", version: "", usedBy: ["provider-stub"] }] },
       {
         plugin: "wakatime-sync",
         dependencies: [

@@ -55,18 +55,18 @@ describe("plugin repair", () => {
   });
 
   it("calls a clone with every declared file healthy", async () => {
-    seedClone("claude-code-auth", ["dist/index.js", "dist/handler.js"]);
-    writeFileSync(join(home, "plugin", "claude-code-auth.js"), "");
+    seedClone("claude-code-provider", ["dist/index.js", "dist/handler.js"]);
+    writeFileSync(join(home, "plugin", "claude-code-provider.js"), "");
     const { checkPluginHealth } = await import("../repair.js");
-    expect(checkPluginHealth(home, "claude-code-auth")).toMatchObject({ healthy: true, missing: [], cloned: true, deployed: true });
+    expect(checkPluginHealth(home, "claude-code-provider")).toMatchObject({ healthy: true, missing: [], cloned: true, deployed: true });
   });
 
   // The exact state that made claude-code unreachable: right commit, main entry present, and
   // the handler its package.json declares never copied.
   it("calls out a clone whose build left a declared file behind", async () => {
-    seedClone("claude-code-auth", ["dist/index.js"]);
+    seedClone("claude-code-provider", ["dist/index.js"]);
     const { checkPluginHealth } = await import("../repair.js");
-    expect(checkPluginHealth(home, "claude-code-auth")).toMatchObject({ healthy: false, missing: ["dist/handler.js"] });
+    expect(checkPluginHealth(home, "claude-code-provider")).toMatchObject({ healthy: false, missing: ["dist/handler.js"] });
   });
 
   it("reports a plugin that was never cloned as neither healthy nor cloned", async () => {
@@ -75,19 +75,19 @@ describe("plugin repair", () => {
   });
 
   it("rebuilds and reports the clone healthy once the missing file lands", async () => {
-    const dir = seedClone("claude-code-auth", ["dist/index.js"]);
+    const dir = seedClone("claude-code-provider", ["dist/index.js"]);
     onDeploy = () => writeFileSync(join(dir, "dist", "handler.js"), "");
     const { repairPlugin } = await import("../repair.js");
-    const after = await repairPlugin(home, "claude-code-auth");
+    const after = await repairPlugin(home, "claude-code-provider");
     // changed: true is what forces the rebuild past the fast path.
-    expect(deployed).toEqual([{ name: "claude-code-auth", changed: true }]);
+    expect(deployed).toEqual([{ name: "claude-code-provider", changed: true }]);
     expect(after).toMatchObject({ healthy: true, missing: [] });
   });
 
   it("still reports what is missing when the rebuild does not fix it", async () => {
-    seedClone("claude-code-auth", ["dist/index.js"]);
+    seedClone("claude-code-provider", ["dist/index.js"]);
     const { repairPlugin } = await import("../repair.js");
-    const after = await repairPlugin(home, "claude-code-auth");
+    const after = await repairPlugin(home, "claude-code-provider");
     expect(after).toMatchObject({ healthy: false, missing: ["dist/handler.js"] });
   });
 

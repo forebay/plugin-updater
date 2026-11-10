@@ -95,12 +95,12 @@ plugin-updater add https://github.com/forebay/<plugin> --sync  # …and mirror i
       body: `A \`plugins.json\` entry flagged \`sync: true\` is mirrored into the **other** app's \`plugins.json\`, so a plugin enabled in OpenCode is also installed in Claude Code (and vice versa). At the start of \`earlyLaunch\`, plugin-updater loads [sync-bridge](https://github.com/forebay/sync-bridge)'s library bundle (\`dist/lib.js\`) and calls \`syncPlugins()\`, then re-reads the list so a freshly-synced-in plugin is cloned and built in the **same** launch. It is additive (never removes) and a no-op when sync-bridge isn't installed.
 
 \`\`\`jsonc
-{ "name": "antigravity-auth", "url": "https://github.com/forebay/antigravity-auth", "enabled": true, "autoUpdate": false, "sync": true }
+{ "name": "antigravity-provider", "url": "https://github.com/forebay/antigravity-provider", "enabled": true, "autoUpdate": false, "sync": true }
 \`\`\`
 
 Set it from the CLI with \`--sync\`:
 \`\`\`bash
-plugin-updater add https://github.com/forebay/antigravity-auth --sync
+plugin-updater add https://github.com/forebay/antigravity-provider --sync
 \`\`\``,
     },
     {
