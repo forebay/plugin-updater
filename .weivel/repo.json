@@ -1,0 +1,15 @@
+{
+  "format": 1,
+  "importName": "plugin-updater",
+  "description": "The old plugin lifecycle manager, retired by ruling and replaced by the shared host.",
+  "topics": [
+    "ai",
+    "ai-proxy",
+    "claude",
+    "forebay",
+    "llm",
+    "opencode",
+    "plugin",
+    "typescript"
+  ]
+}
